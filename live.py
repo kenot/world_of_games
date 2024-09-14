@@ -1,3 +1,8 @@
+from guess_game import GuessGame
+from memory_game import MemoryGame
+from currency_roulette_game import CurrencyRouletteGame
+
+
 def welcome(name):
     print(f'Hello {name} and welcome to the World of Games (WoG).\nHere you can find many cool games to play.\n')
 
@@ -26,7 +31,7 @@ def load_game():
     for key, description in games.items():
         print(f'    {key}. {description}')
 
-    game_choice = get_valid_input('\nPlease make your choice: ', games.keys())
+    game_choice = get_valid_input('\nPlease make your choice: ', list(games.keys()))
 
     print(f'\nWelcome to {games[game_choice].split(" - ")[0]}!')
 
@@ -37,3 +42,16 @@ def load_game():
 
     difficulty_choice = get_valid_input('\nPlease select your preferred difficulty level: ', range(1, 6))
     print(f'\nYour preference is to play as {difficulties[difficulty_choice - 1]}\n')
+
+    if game_choice == 1:
+        print("\nStarting Memory Game...\n")
+        memory_game = MemoryGame(difficulty_choice)
+        memory_game.play()
+    elif game_choice == 2:
+        print("\nStarting Guess Game...\n")
+        guess_game = GuessGame(difficulty_choice)
+        guess_game.play()
+    elif game_choice == 3:
+        print("\nStarting Currency Roulette...\n")
+        currency_roulette = CurrencyRouletteGame(difficulty_choice)
+        currency_roulette.play()
