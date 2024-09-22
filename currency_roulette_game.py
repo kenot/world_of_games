@@ -1,33 +1,41 @@
 import random
+import requests
+from game import Game
 
-
-class CurrencyRouletteGame:
+class CurrencyRouletteGame(Game):
     def __init__(self, difficulty):
-        self.difficulty = difficulty
-        self.exchange_rate = self.get_usd_to_ils_rate()
+        super().__init__(difficulty)
 
-    def get_usd_to_ils_rate(self):
-        return 3.5
+    def get_current_exchange_rate(self):
+        url = 'https://api.exchangerate-api.com/v4/latest/USD'
+        response = requests.get(url)
 
-    def get_money_interval(self, usd_amount):
-        total_value = usd_amount * self.exchange_rate
-        margin_of_error = 5 - self.difficulty
-        return total_value - margin_of_error, total_value + margin_of_error
+        if response.status_code == 200:
+            data = response.json()
+            return data['rates']['ILS']  # Get the ILS rate
+        else:
+            print("Error fetching exchange rate.")
+            return None
 
-    def get_guess_from_user(self, usd_amount):
-        guess = float(input(f"How much do you think {usd_amount:.2f} USD is in ILS? "))
-        return guess
+    def get_money_interval(self, amount_usd):
+        exchange_rate = self.get_current_exchange_rate()
+        total_value = amount_usd * exchange_rate
+        margin = 5 - self.difficulty
+        return total_value - margin, total_value + margin
+
+    def get_guess_from_user(self, amount_usd):
+        user_input = input(f'Guess the value of {amount_usd} USD in ILS: ')
+
+        formatted_user_input = user_input.replace(',', '.')
+
+        try:
+            return float(formatted_user_input)
+        except ValueError:
+            print(f'Invalid input. Please enter a valid number.')
+            return self.get_guess_from_user(amount_usd)
 
     def play(self):
-        usd_amount = random.uniform(1, 100)
-
-        lower_bound, upper_bound = self.get_money_interval(usd_amount)
-
-        user_guess = self.get_guess_from_user(usd_amount)
-
-        if lower_bound <= user_guess <= upper_bound:
-            print(f"Correct! {usd_amount:.2f} USD is approximately {usd_amount * self.exchange_rate:.2f} ILS.")
-            return True
-        else:
-            print(f"Sorry, {usd_amount:.2f} USD is approximately {usd_amount * self.exchange_rate:.2f} ILS.")
-            return False
+        amount_usd = random.randint(1, 100)
+        interval = self.get_money_interval(amount_usd)
+        guess = self.get_guess_from_user(amount_usd)
+        return interval[0] <= guess <= interval[1]
