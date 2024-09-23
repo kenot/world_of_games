@@ -11,7 +11,12 @@ class MemoryGame(Game):
         return [random.randint(1, 101) for _ in range(self.difficulty)]
 
     def get_list_from_user(self):
-        return [int(input(f'Enter number {i + 1}: ')) for i in range(self.difficulty)]
+        user_sequence = []
+        print(f"Enter the {self.difficulty} numbers you remember, one at a time.")
+        for i in range(self.difficulty):
+            user_input = self.validate_input(f'Enter number {i + 1}: ')
+            user_sequence.append(user_input)
+        return user_sequence
 
     def is_list_equal(self, list1, list2):
         return list1 == list2

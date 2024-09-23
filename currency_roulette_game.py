@@ -2,6 +2,7 @@ import random
 import requests
 from game import Game
 
+
 class CurrencyRouletteGame(Game):
     def __init__(self, difficulty):
         super().__init__(difficulty)
@@ -24,15 +25,15 @@ class CurrencyRouletteGame(Game):
         return total_value - margin, total_value + margin
 
     def get_guess_from_user(self, amount_usd):
-        user_input = input(f'Guess the value of {amount_usd} USD in ILS: ')
+        while True:
+            user_input = input(f'Guess the value of {amount_usd} USD in ILS: ')
 
-        formatted_user_input = user_input.replace(',', '.')
+            formatted_user_input = user_input.replace(',', '.')
 
-        try:
-            return float(formatted_user_input)
-        except ValueError:
-            print(f'Invalid input. Please enter a valid number.')
-            return self.get_guess_from_user(amount_usd)
+            try:
+                return float(formatted_user_input)
+            except ValueError:
+                print(f'Invalid input. Please enter a valid number.')
 
     def play(self):
         amount_usd = random.randint(1, 100)
