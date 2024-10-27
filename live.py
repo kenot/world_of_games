@@ -1,6 +1,8 @@
 from guess_game import GuessGame
 from memory_game import MemoryGame
 from currency_roulette_game import CurrencyRouletteGame
+from score import add_score
+from utils import screen_cleaner
 
 def welcome(name):
     print(f'Hello {name} and welcome to the World of Games (WoG).\nHere you can find many cool games to play.\n')
@@ -55,4 +57,13 @@ def load_game():
     # Dynamically instantiate the game class based on user choice and start the game
     selected_game_class = games[game_choice]  # Fetches the game class
     game_instance = selected_game_class(difficulty_choice)  # Creates an instance with the chosen difficulty
-    game_instance.start()
+
+    game_won = game_instance.start()
+
+    if game_won:
+        print('\nCongratulations, you won!')
+        add_score(difficulty_choice)
+    else:
+        print('\nGood try! Better luck next time.')
+
+    screen_cleaner()
