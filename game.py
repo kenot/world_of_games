@@ -1,4 +1,6 @@
 from abc import ABC, abstractmethod
+from score import add_score
+from utils import screen_cleaner
 
 class Game(ABC):
     def __init__(self, difficulty):

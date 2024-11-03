@@ -61,9 +61,4 @@ def load_game():
     game_won = game_instance.start()
 
     if game_won:
-        print('\nCongratulations, you won!')
         add_score(difficulty_choice)
-    else:
-        print('\nGood try! Better luck next time.')
-
-    screen_cleaner()

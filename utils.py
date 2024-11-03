@@ -1,7 +1,7 @@
 import os
 import platform
 
-SCORES_FILE_NAME = "scores.txt"
+SCORES_FILE_NAME = "~/world_of_games/scores.txt"
 BAD_RETURN_CODE = -1
 
 def screen_cleaner():
